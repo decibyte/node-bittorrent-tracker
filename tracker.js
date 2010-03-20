@@ -217,4 +217,4 @@ var server = http.createServer(function (req, res) {
     res.close();
 });
 
-server.listen(8080);
+exports.server = server;
