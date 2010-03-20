@@ -160,6 +160,15 @@ function sendError(res, message) {
     res.close();
 }
 
+function parse_hash(hash)
+{
+        result = ''
+	hash.split('').forEach(function(chunk) {
+            result += chunk.charCodeAt(0).toString(16);
+        });
+        return result;
+}
+
 var server = http.createServer(function (req, res) {
     var params = url.parse(req.url);
     var query = querystring.parse(params["query"], null, null, true);
@@ -184,7 +193,27 @@ var server = http.createServer(function (req, res) {
         "Content-Type": "text/plain"
     });
 
-    res.sendBody(body);
+    sys.puts('"' + query['event'] + '" request from ' + req.connection.remoteAddress + ':' + query['port'] + ' for file with id ' + parse_hash(query['info_hash']));
+    for(var key in tracker.files)
+    {
+        var file = tracker.files[key];
+        sys.puts('File ' + parse_hash(key) + ' has ' + file.peerList.length + ' peer(s):' );
+        file.peerList.forEach(function(peer)
+        {
+            addr = '';
+            peer.compact_hostport.slice(0,4).split('').forEach(function(part)
+            {
+                addr += part.charCodeAt(0) + '.';
+            });
+            addr = addr.slice(0, -1);
+            p1 = peer.compact_hostport.charCodeAt(4) << 8;
+            p2 = peer.compact_hostport.charCodeAt(5);
+            addr += ':' + (p1 + p2);
+            sys.puts(addr);
+        });
+    }
+
+    res.write(body);
     res.close();
 });
 
