@@ -1,1 +1,5 @@
+This branch will use couchdb to remember peers and stuff, instead of keeping it in local variables. This will have 2 purposes:
+1) Making it possible to resume a server session when the server is restarted.
+2) Making it easy to use the tracker data from somewhere else (e.g. a website with some sort of status pages).
+
 The querystring lib trims values and keys and also convert values to integers. You don't want that so right now you need isaacs fix for that. You can find it here: http://github.com/isaacs/node/commit/d27d47fab6844ff15d0fab509d4419890965d07a
