@@ -156,8 +156,8 @@ function sendError(res, message) {
         "Content-Type": "text/plain"
     });
 
-    res.sendBody(message);
-    res.finish();
+    res.write(message);
+    res.close();
 }
 
 var server = http.createServer(function (req, res) {
@@ -185,7 +185,7 @@ var server = http.createServer(function (req, res) {
     });
 
     res.sendBody(body);
-    res.finish();
+    res.close();
 });
 
-server.listen(80);
+server.listen(8080);
